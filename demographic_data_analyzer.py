@@ -2,7 +2,7 @@ import pandas as pd
 
 def calculate_demographic_data(print_data=True):
     # Read data from file
-    df = pd.read_csv("./adult.data.csv", header=0);
+    df = pd.read_csv("./adult.data.csv", header=0)
 
     print(df)
     # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
@@ -35,12 +35,19 @@ def calculate_demographic_data(print_data=True):
 
     rich_percentage = round(num_min_workers[num_min_workers['salary'] == '>50K'].shape[0] / num_min_workers.shape[0] * 100)
 
-    # What country has the highest percentage of people that earn >50K?
-    highest_earning_country = None
-    highest_earning_country_percentage = None
+    totalByCountry = df['native-country'].value_counts()
+    earnMore50K = df[df['salary'] == '>50K']
+    earnMore50KByCountry = earnMore50K['native-country'].value_counts()
+    percentageByCountry = round((earnMore50KByCountry / totalByCountry) * 100, 1)
 
+    # What country has the highest percentage of people that earn >50K?
+    highest_earning_country = percentageByCountry.idxmax()
+    highest_earning_country_percentage = percentageByCountry.max()
+
+    indiaMore50K = earnMore50K[earnMore50K['native-country'] == 'India']
+    indiaMore50KByOccupation =  indiaMore50K['occupation'].value_counts()
     # Identify the most popular occupation for those who earn >50K in India.
-    top_IN_occupation = None
+    top_IN_occupation = indiaMore50KByOccupation.idxmax()
 
     # DO NOT MODIFY BELOW THIS LINE
 
